@@ -23,35 +23,45 @@ albania.head()
 
 
 def color(monument_type):
-  if monument_type == "castle":
-    col = 'blue'
-  elif monument_type == "church":
-    col = 'orange'
-  else:
-    col = 'red'
-  return col
+    if monument_type == "castle":
+        col = 'blue'
+    elif monument_type == "church":
+        col = 'orange'
+    else:
+        col = 'red'
+    return col
 
 
 def icon(monument_type):
-  if monument_type == "castle":
-    icon = 'fa-bank'
-  elif monument_type == "church":
-    icon = 'fa-plus-square'
-  else:
-    icon = 'fa-question-circle'
-  return icon
+    if monument_type == "castle":
+        icon = 'fa-bank'
+    elif monument_type == "church":
+        icon = 'fa-plus-square'
+    else:
+        icon = 'fa-question-circle'
+    return icon
+
+
+colors = {"Berat": "#DFFF00", "Dibër": "#CACFD2", "Durrës": "#FFBF00", "Elbasan": "#DE3163", "Fier": "#40E0D0", "Gjirokastër": "#9FE2BF",
+          "Korçë": "#6495ED", "Kukës": "#2C3E50", "Lezhë": "#FA8072", "Shkodër": "#138D75", "Tiranë": "#5499C7", "Vlorë": "#FF7F50"}
 
 
 def style_function(feature):
-  return {"fillColor": "#0084ff", "color": "red", "weight": 1.5, "dashArray": "5, 5"}
+    city = feature['properties']['name_1']
+    ret = {}
+    ret["Fillcolor"] = "black"
+    ret["weight"] = 1.5
+    ret["dashArray"] = "5, 5"
+    ret["color"] = colors[city]
+    return ret
 
 
 def highlight_function(feature):
-  return {"fillColor": "#0084ff", "color": "blue", "weight": 1.5, "dashArray": "5, 5"}
+    return {"fillColor": "blue"}
 
 
 with open('world-countries.json') as handle:
-  country_geo = json.loads(handle.read())
+    country_geo = json.loads(handle.read())
 
 # for i in country_geo['features']:
 #   if i['properties']['name'] == 'Albania':
@@ -82,22 +92,22 @@ folium.map.CustomPane("labels").add_to(eventmap2)
 folium.TileLayer("CartoDBPositronOnlyLabels", pane="labels").add_to(eventmap2)
 
 for _, row in albania.iterrows():
-  html = """Location: {}<br> Description: {}""".format(
-      row['city'], row['notes'])
+    html = """Location: {}<br> Description: {}""".format(
+        row['city'], row['notes'])
 
-  iframe = folium.IFrame(html, width=300, height=200)
-  popup = folium.Popup(iframe, max_width=500)
-  marker = folium.Marker(
-      location=[row['latitude'], row['longitude']],
-      popup=popup,
-      # tooltip='Click for details!',
-      icon=folium.Icon(
-          color=color(row['monument_type']),
-          icon=icon(row['monument_type']),
-          prefix='fa',
-          icon_color='black'
-      )
-  ).add_to(marker_cluster2)
+    iframe = folium.IFrame(html, width=300, height=200)
+    popup = folium.Popup(iframe, max_width=500)
+    marker = folium.Marker(
+        location=[row['latitude'], row['longitude']],
+        popup=popup,
+        # tooltip='Click for details!',
+        icon=folium.Icon(
+            color=color(row['monument_type']),
+            icon=icon(row['monument_type']),
+            prefix='fa',
+            icon_color='black'
+        )
+    ).add_to(marker_cluster2)
 
 
 # folium.TileLayer("OpenStreetMap").add_to(eventmap2)
