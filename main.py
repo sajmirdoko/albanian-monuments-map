@@ -53,10 +53,10 @@ def highlight_function(feature):
 with open('world-countries.json') as handle:
   country_geo = json.loads(handle.read())
 
-for i in country_geo['features']:
-  if i['properties']['name'] == 'Albania':
-    country = i
-    break
+# for i in country_geo['features']:
+#   if i['properties']['name'] == 'Albania':
+#     country = i
+#     break
 
 eventmap2 = folium.Map(
     location=[41.00, 20.00],
@@ -65,7 +65,7 @@ eventmap2 = folium.Map(
     prefer_canvas=True
 )
 folium.GeoJson(
-    country,
+    country_geo,
     name='albania',
     overlay=True,
     style_function=style_function,
